@@ -6,6 +6,14 @@ const canvas = require('canvas-wrapper');
 
 
 module.exports = (course, stepCallback) => {
-
-    stepCallback(null, course);
+    canvas.post(`/api/v1/courses/${course.info.canvasOU}/link_validation`, {}, err => {
+        if (err) {
+            course.error(err);
+            stepCallback(null, course);
+            return;
+        }
+        
+        course.log('Link Validator Started', {started: 'true'});
+        stepCallback(null, course);
+    });
 };
